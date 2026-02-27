@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Leadership Challenge – Cultural Intelligence Command Center</title>
+<style>
+  /* =============================================
+     FONTS & ROOT VARIABLES
+  ============================================= */
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --navy: #0a0f2e;
+    --navy2: #0f1a45;
+    --navy3: #152060;
+    --gold: #c9a227;
+    --gold2: #f5cc5e;
+    --gold-light: #ffeaa0;
+    --white: #f0f4ff;
+    --glass: rgba(255,255,255,0.07);
+    --glass-border: rgba(255,255,255,0.13);
+    --danger: #ff4f6e;
+    --success: #2de08d;
+    --warning: #ffb347;
+    --info: #4fc3f7;
+    --dim1: #7c6ef5; /* Power Distance */
+    --dim2: #f56e4f; /* Individualism */
+    --dim3: #4fc3f7; /* Masculinity */
+    --dim4: #2de08d; /* Uncertainty Avoidance */
+    --dim5: #f5cc5e; /* Long-Term */
+    --dim6: #f56eb0; /* Indulgence */
+    --transition: 0.35s cubic-bezier(.4,0,.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* =============================================
+     ANIMATED BACKGROUND
+  ============================================= */
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* =============================================
+     SCREENS
+  ============================================= */
+  .screen {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+  .screen.active { display: flex; }
+
+  /* =============================================
+     HOMEPAGE
+  ============================================= */
+  #home-screen {
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .home-hero {
+    text-align: center;
+    max-width: 820px;
+    animation: fadeInUp 0.9s ease both;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(201,162,39,0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold2);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+
+  .home-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, #fff 30%, var(--gold2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .home-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    font-style: italic;
+    color: var(--gold2);
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+    opacity: 0.9;
+  }
+
+  .hofstede-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(240,244,255,0.45);
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 28px;
+  }
+
+  .home-subtitle {
+    font-size: 1.05rem;
+    color: rgba(240,244,255,0.65);
+    line-height: 1.7;
+    max-width: 620px;
+    margin: 0 auto 16px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 38px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    text-decoration: none;
+  }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: inherit;
+  }
+  .btn:hover::after { opacity: 1; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+    color: var(--navy);
+    box-shadow: 0 8px 40px rgba(201,162,39,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 50px rgba(201,162,39,0.55); }
+
+  .btn-secondary {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--white);
+    backdrop-filter: blur(10px);
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #ff4f6e, #c7224a);
+    color: #fff;
+    box-shadow: 0 6px 30px rgba(255,79,110,0.35);
+  }
+
+  .home-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+
+  /* Feature cards */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    max-width: 860px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .feature-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 22px 18px;
+    backdrop-filter: blur(12px);
+    transition: var(--transition);
+    cursor: default;
+  }
+  .feature-card:hover { background: rgba(255,255,255,0.11); transform: translateY(-4px); }
+
+  .feature-icon { font-size: 1.8rem; margin-bottom: 10px; }
+  .feature-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; color: var(--gold2); }
+  .feature-desc { font-size: 0.82rem; color: rgba(240,244,255,0.55); line-height: 1.55; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    background: linear-gradient(135deg, #111c4e, #0c1535);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 38px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: fadeInUp 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) transparent;
+  }
+
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 22px;
+    color: var(--gold2);
+  }
+
+  .dim-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .dim-row:last-child { border-bottom: none; }
+  .dim-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    margin-top: 4px; flex-shrink: 0;
+  }
+  .dim-name { font-weight: 700; font-size: 0.95rem; color: var(--white); }
+  .dim-desc { font-size: 0.82rem; color: rgba(240,244,255,0.55); margin-top: 3px; line-height: 1.5; }
+
+  /* =============================================
+     COUNTRY SCREEN
+  ============================================= */
+  #country-screen { justify-content: center; padding: 40px 20px; }
+
+  .country-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 42px;
+    max-width: 680px;
+    width: 100%;
+    backdrop-filter: blur(16px);
+    animation: fadeInUp 0.5s ease;
+    text-align: center;
+  }
+
+  .country-flag { font-size: 5rem; margin-bottom: 16px; display: block; }
+  .country-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: var(--gold2);
+  }
+  .country-role { font-size: 0.9rem; color: rgba(240,244,255,0.5); margin-bottom: 24px; letter-spacing: 1px; text-transform: uppercase; }
+  .country-overview {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(240,244,255,0.75);
+    margin-bottom: 30px;
+    text-align: left;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-left: 3px solid var(--gold);
+  }
+
+  .dim-bars { text-align: left; margin-bottom: 28px; }
+  .dim-bar-row { margin-bottom: 14px; }
+  .dim-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  .dim-bar-track {
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50px;
+    overflow: hidden;
+  }
+  .dim-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* =============================================
+     GAME SCREEN
+  ============================================= */
+  #game-screen { padding: 0; align-items: stretch; min-height: 100vh; }
+
+  /* Dashboard */
+  .dashboard {
+    background: rgba(10,15,46,0.95);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(10px);
+  }
+
+  .dash-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gold);
+    white-space: nowrap;
+    margin-right: 6px;
+  }
+
+  .dash-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 8px 16px;
+    min-width: 80px;
+  }
+  .dash-stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(240,244,255,0.45); }
+  .dash-stat-value { font-family: 'Space Mono', monospace; font-size: 1.2rem; font-weight: 700; color: var(--gold2); }
+
+  .dash-round-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 180px;
+  }
+  .dash-round-label { font-size: 0.72rem; color: rgba(240,244,255,0.45); letter-spacing: 1px; text-transform: uppercase; }
+  .progress-track {
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    transition: width 0.5s ease;
+  }
+
+  .combo-badge {
+    background: linear-gradient(135deg, #7c6ef5, #5543d4);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: transform 0.3s;
+    white-space: nowrap;
+  }
+  .combo-badge.pop { animation: comboPop 0.5s ease; }
+
+  /* Game content */
+  .game-content {
+    display: flex;
+    gap: 0;
+    flex: 1;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .game-left { flex: 1; min-width: 0; }
+  .game-right { width: 300px; flex-shrink: 0; margin-left: 24px; }
+
+  /* Round header */
+  .round-header {
+    margin-bottom: 22px;
+    animation: fadeInUp 0.4s ease;
+  }
+  .round-tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .tag-round1 { background: rgba(124,110,245,0.2); color: var(--dim1); border: 1px solid var(--dim1); }
+  .tag-round2 { background: rgba(245,110,79,0.2); color: var(--dim2); border: 1px solid var(--dim2); }
+  .tag-round3 { background: rgba(255,79,110,0.2); color: #ff4f6e; border: 1px solid #ff4f6e; }
+
+  .round-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .round-desc { font-size: 0.88rem; color: rgba(240,244,255,0.5); }
+
+  /* Scenario card */
+  .scenario-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(12px);
+    animation: fadeInUp 0.4s ease;
+  }
+
+  .scenario-q-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(240,244,255,0.4);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .scenario-dim-tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .scenario-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: rgba(240,244,255,0.9);
+    margin-bottom: 22px;
+  }
+
+  /* Options */
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: left;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    width: 100%;
+  }
+  .option-btn:hover:not(:disabled) {
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(201,162,39,0.4);
+    transform: translateX(4px);
+  }
+  .option-btn:disabled { cursor: default; }
+
+  .option-letter {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: var(--transition);
+  }
+
+  .option-btn.correct { background: rgba(45,224,141,0.15); border-color: var(--success); }
+  .option-btn.correct .option-letter { background: var(--success); color: var(--navy); }
+  .option-btn.incorrect { background: rgba(255,79,110,0.12); border-color: var(--danger); }
+  .option-btn.incorrect .option-letter { background: var(--danger); color: #fff; }
+  .option-btn.neutral { opacity: 0.45; }
+
+  /* Hint */
+  .hint-box {
+    background: rgba(79,195,247,0.1);
+    border: 1px solid rgba(79,195,247,0.3);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 0.84rem;
+    color: var(--info);
+    margin-bottom: 14px;
+    display: none;
+  }
+
+  /* Explanation popup */
+  .explanation-panel {
+    background: linear-gradient(135deg, rgba(20,30,80,0.98), rgba(10,15,46,0.98));
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 22px;
+    margin-top: 16px;
+    display: none;
+    animation: fadeInUp 0.3s ease;
+  }
+
+  .expl-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .expl-icon { font-size: 1.4rem; }
+  .expl-title { font-weight: 700; font-size: 1rem; }
+  .expl-title.correct-title { color: var(--success); }
+  .expl-title.incorrect-title { color: var(--danger); }
+
+  .expl-body { font-size: 0.88rem; line-height: 1.7; color: rgba(240,244,255,0.8); margin-bottom: 14px; }
+
+  .expl-takeaway {
+    background: rgba(201,162,39,0.1);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 14px;
+    font-size: 0.84rem;
+    color: rgba(240,244,255,0.85);
+    line-height: 1.6;
+  }
+  .expl-takeaway strong { color: var(--gold2); }
+
+  .expl-score-delta {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .delta-pos { color: var(--success); }
+  .delta-neg { color: var(--danger); }
+
+  .next-btn-wrap { margin-top: 16px; display: flex; justify-content: flex-end; }
+
+  /* =============================================
+     RADAR CHART SIDEBAR
+  ============================================= */
+  .sidebar-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 20px;
+    backdrop-filter: blur(12px);
+    margin-bottom: 16px;
+  }
+
+  .sidebar-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(240,244,255,0.4);
+    margin-bottom: 14px;
+  }
+
+  #radar-canvas { display: block; margin: 0 auto; }
+
+  .dim-legend { margin-top: 14px; }
+  .dim-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    margin-bottom: 7px;
+    color: rgba(240,244,255,0.65);
+  }
+  .dim-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .stats-list { display: flex; flex-direction: column; gap: 8px; }
+  .stat-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+  .stat-row span:first-child { color: rgba(240,244,255,0.55); }
+  .stat-row span:last-child { font-family: 'Space Mono', monospace; font-weight: 700; }
+
+  /* =============================================
+     SCORE POPUP ANIMATION
+  ============================================= */
+  .score-popup {
+    position: fixed;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    pointer-events: none;
+    z-index: 999;
+    animation: scoreFloat 1.2s ease forwards;
+  }
+  .score-popup.pos { color: var(--success); }
+  .score-popup.neg { color: var(--danger); }
+
+  /* =============================================
+     END SCREEN
+  ============================================= */
+  #end-screen {
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .end-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 42px;
+    max-width: 820px;
+    width: 100%;
+    backdrop-filter: blur(16px);
+    animation: fadeInUp 0.6s ease;
+    text-align: center;
+  }
+
+  .trophy { font-size: 4rem; margin-bottom: 14px; display: block; animation: trophyBounce 1s ease; }
+
+  .perf-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gold2);
+    margin-bottom: 6px;
+  }
+
+  .final-score {
+    font-family: 'Space Mono', monospace;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--white);
+    margin: 14px 0 4px;
+  }
+
+  .final-score-label { font-size: 0.85rem; color: rgba(240,244,255,0.4); text-transform: uppercase; letter-spacing: 2px; }
+
+  .end-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 28px 0;
+    text-align: center;
+  }
+
+  .end-stat-box {
+    background: rgba(0,0,0,0.2);
+    border-radius: 14px;
+    padding: 16px 12px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .end-stat-val { font-family: 'Space Mono', monospace; font-size: 1.6rem; font-weight: 700; color: var(--gold2); }
+  .end-stat-lbl { font-size: 0.72rem; color: rgba(240,244,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  .weakness-section { text-align: left; margin: 20px 0; }
+  .weakness-title { font-weight: 700; margin-bottom: 12px; color: var(--gold2); }
+  .weakness-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.88rem; color: rgba(240,244,255,0.75); }
+
+  .advice-box {
+    background: rgba(201,162,39,0.08);
+    border: 1px solid rgba(201,162,39,0.25);
+    border-radius: 14px;
+    padding: 18px 20px;
+    text-align: left;
+    margin: 20px 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(240,244,255,0.8);
+  }
+  .advice-box strong { color: var(--gold2); }
+
+  .end-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+
+  /* Leaderboard */
+  .leaderboard-list { text-align: left; }
+  .lb-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.04);
+    font-size: 0.88rem;
+  }
+  .lb-rank { font-family: 'Space Mono', monospace; font-weight: 700; width: 24px; color: var(--gold); }
+  .lb-name { flex: 1; }
+  .lb-score { font-family: 'Space Mono', monospace; color: var(--gold2); font-weight: 700; }
+  .lb-empty { text-align: center; padding: 30px; color: rgba(240,244,255,0.35); font-size: 0.88rem; }
+
+  /* Print report */
+  .print-section { display: none; }
+
+  /* =============================================
+     TRANSITIONS & ANIMATIONS
+  ============================================= */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes comboPop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes scoreFloat {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-80px); }
+  }
+
+  @keyframes trophyBounce {
+    0%,100% { transform: translateY(0) scale(1); }
+    40%     { transform: translateY(-18px) scale(1.1); }
+    60%     { transform: translateY(-8px) scale(1.05); }
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .screen-fade-enter { animation: fadeInUp 0.45s ease; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(201,162,39,0.3); border-radius: 3px; }
+
+  /* Ripple */
+  .ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: scale(0);
+    animation: ripple 0.55s linear;
+    pointer-events: none;
+  }
+  @keyframes ripple {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* =============================================
+     RESPONSIVE
+  ============================================= */
+  @media (max-width: 768px) {
+    .game-content { flex-direction: column; }
+    .game-right { width: 100%; margin-left: 0; margin-top: 16px; }
+    .end-stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 500px) {
+    .dashboard { gap: 8px; }
+    .end-stats-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Animated Background Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- =============================================
+     SCREEN 1: HOME
+============================================= -->
+<section id="home-screen" class="screen active">
+  <div class="home-hero">
+    <div class="badge">✦ Executive Level Training Simulation ✦</div>
+    <h1 class="home-title">Global Leadership Challenge</h1>
+    <p class="home-tagline">Master Global Strategy. Navigate Culture. Lead Without Borders.</p>
+    <p class="home-subtitle">
+      The Cultural Intelligence Command Center — a strategic simulation designed to train future global leaders in cross-cultural communication, negotiation, leadership adaptation, and crisis management. Grounded in Hofstede's Cultural Dimensions Theory.
+    </p>
+    <div class="hofstede-badge">🎓 Based on Hofstede's 6 Cultural Dimensions</div>
+    <div class="home-actions">
+      <button class="btn btn-primary" id="start-btn">▶ &nbsp;Start Simulation</button>
+      <button class="btn btn-secondary" id="how-btn">⚡ &nbsp;How It Works</button>
+      <button class="btn btn-secondary" id="lb-btn-home">🏆 &nbsp;Leaderboard</button>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <div class="feature-title">6 Cultural Profiles</div>
+        <div class="feature-desc">Japan, USA, Germany, India, Brazil, Sweden — each with unique Hofstede profiles.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">3 Strategic Phases</div>
+        <div class="feature-desc">Leadership | Negotiation | Crisis Response — 6+ scenarios each.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Real-Time Cultural Intelligence Dashboard</div>
+        <div class="feature-desc">Radar scoring, combo streaks & performance analytics.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">Adaptive AI</div>
+        <div class="feature-desc">Difficulty adjusts to your performance dynamically.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     SCREEN 2: COUNTRY ASSIGNMENT
+============================================= -->
+<section id="country-screen" class="screen">
+  <div class="country-card" id="country-card">
+    <span class="country-flag" id="c-flag">🌏</span>
+    <div class="country-name" id="c-name">Loading...</div>
+    <div class="country-role">Your Assignment: Global Expansion Director</div>
+    <div class="country-overview" id="c-overview">Loading country data...</div>
+    <div class="dim-bars" id="c-dim-bars"></div>
+    <button class="btn btn-primary" id="begin-round1-btn" style="width:100%">Begin Round 1 →</button>
+  </div>
+</section>
+
+<!-- =============================================
+     SCREEN 3: GAME
+============================================= -->
+<section id="game-screen" class="screen">
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <div class="dash-logo">GLC</div>
+    <div class="dash-stat">
+      <span class="dash-stat-label">CQ Score</span>
+      <span class="dash-stat-value" id="d-score">100</span>
+    </div>
+    <div class="dash-stat">
+      <span class="dash-stat-label">Mistakes</span>
+      <span class="dash-stat-value" id="d-mistakes" style="color:#ff4f6e">0</span>
+    </div>
+    <div class="dash-round-info">
+      <span class="dash-round-label" id="d-round-label">Round 1 – Leadership</span>
+      <div class="progress-track"><div class="progress-fill" id="d-progress" style="width:0%"></div></div>
+    </div>
+    <div class="combo-badge" id="combo-badge">🔥 Streak: 0</div>
+    <div class="dash-stat" style="min-width:110px">
+      <span class="dash-stat-label">Country</span>
+      <span class="dash-stat-value" id="d-country" style="font-size:1rem">—</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="game-content">
+    <div class="game-left">
+      <!-- Round Header -->
+      <div class="round-header" id="round-header">
+        <span class="round-tag" id="round-tag">Round 1</span>
+        <div class="round-title" id="round-title">Leadership & Team Establishment</div>
+        <div class="round-desc" id="round-desc">Setting up your management structure in a new cultural environment.</div>
+      </div>
+
+      <!-- Scenario Card -->
+      <div class="scenario-card" id="scenario-card">
+        <div class="scenario-q-num" id="q-num">Question 1 of 6</div>
+        <div class="scenario-dim-tag" id="dim-tag">Power Distance</div>
+        <div class="scenario-text" id="q-text">Loading scenario...</div>
+        <div class="hint-box" id="hint-box">💡 Hint: Consider the cultural context before choosing.</div>
+        <div class="options-grid" id="options-grid"></div>
+        <div class="explanation-panel" id="explanation-panel">
+          <div class="expl-header">
+            <span class="expl-icon" id="expl-icon">✅</span>
+            <div>
+              <div class="expl-title" id="expl-title">Correct!</div>
+              <div class="expl-score-delta" id="expl-delta">+15</div>
+            </div>
+          </div>
+          <div class="expl-body" id="expl-body">Explanation here.</div>
+          <div class="expl-takeaway"><strong>📌 Management Takeaway:</strong> <span id="expl-takeaway">Takeaway here.</span></div>
+          <div class="next-btn-wrap">
+            <button class="btn btn-primary" id="next-btn">Next Question →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="game-right">
+      <div class="sidebar-card">
+        <div class="sidebar-title">Dimension Alignment</div>
+        <canvas id="radar-canvas" width="260" height="240"></canvas>
+        <div class="dim-legend" id="dim-legend">
+          <div class="dim-legend-item"><div class="dim-legend-dot" style="background:var(--dim1)"></div>Power Distance</div>
+          <div class="dim-legend-item"><div class="dim-legend-dot" style="background:var(--dim2)"></div>Individualism</div>
+          <div class="dim-legend-item"><div class="dim-legend-dot" style="background:var(--dim3)"></div>Masculinity</div>
+          <div class="dim-legend-item"><div class="dim-legend-dot" style="background:var(--dim4)"></div>Uncertainty Avoid.</div>
+          <div class="dim-legend-item"><div class="dim-legend-dot" style="background:var(--dim5)"></div>Long-Term Orient.</div>
+          <div class="dim-legend-item"><div class="dim-legend-dot" style="background:var(--dim6)"></div>Indulgence</div>
+        </div>
+      </div>
+      <div class="sidebar-card">
+        <div class="sidebar-title">Session Stats</div>
+        <div class="stats-list">
+          <div class="stat-row"><span>Correct</span><span id="s-correct" style="color:var(--success)">0</span></div>
+          <div class="stat-row"><span>Incorrect</span><span id="s-incorrect" style="color:var(--danger)">0</span></div>
+          <div class="stat-row"><span>Best Streak</span><span id="s-streak" style="color:var(--gold2)">0</span></div>
+          <div class="stat-row"><span>Bonus Earned</span><span id="s-bonus" style="color:var(--info)">0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     SCREEN 4: END
+============================================= -->
+<section id="end-screen" class="screen">
+  <div class="end-card">
+    <span class="trophy" id="trophy-emoji">🏆</span>
+    <div class="perf-title" id="perf-title">Global Culture Champion</div>
+    <div class="final-score" id="final-score">0</div>
+    <div class="final-score-label">Cultural Intelligence Points</div>
+
+    <div class="end-stats-grid" id="end-stats-grid">
+      <div class="end-stat-box"><div class="end-stat-val" id="es-correct">0</div><div class="end-stat-lbl">Correct</div></div>
+      <div class="end-stat-box"><div class="end-stat-val" id="es-incorrect">0</div><div class="end-stat-lbl">Incorrect</div></div>
+      <div class="end-stat-box"><div class="end-stat-val" id="es-streak">0</div><div class="end-stat-lbl">Best Streak</div></div>
+      <div class="end-stat-box"><div class="end-stat-val" id="es-bonus">0</div><div class="end-stat-lbl">Bonus Pts</div></div>
+      <div class="end-stat-box"><div class="end-stat-val" id="es-country">—</div><div class="end-stat-lbl">Country</div></div>
+      <div class="end-stat-box"><div class="end-stat-val" id="es-rounds">3</div><div class="end-stat-lbl">Rounds</div></div>
+    </div>
+
+    <canvas id="end-radar-canvas" width="300" height="260" style="margin: 0 auto 20px; display:block;"></canvas>
+
+    <div class="weakness-section" id="weakness-section">
+      <div class="weakness-title">🔍 Dimension Weaknesses</div>
+      <div id="weakness-list"></div>
+    </div>
+
+    <div class="advice-box" id="advice-box">
+      <strong>📋 Personalized Development Plan:</strong><br>
+      <span id="advice-text">Loading advice...</span>
+    </div>
+
+    <div class="end-actions">
+      <button class="btn btn-primary" id="restart-btn">↺ &nbsp;Restart</button>
+      <button class="btn btn-secondary" id="lb-btn-end">🏆 &nbsp;Leaderboard</button>
+      <button class="btn btn-secondary" id="export-btn">📄 &nbsp;Export Report</button>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     MODALS
+============================================= -->
+<!-- How It Works -->
+<div class="modal-overlay" id="how-modal">
+  <div class="modal-box">
+    <div class="modal-title">⚡ How It Works</div>
+    <p style="font-size:0.9rem;color:rgba(240,244,255,0.65);margin-bottom:22px;line-height:1.7">
+      This simulation evaluates your Cultural Intelligence (CQ) across 3 progressive rounds. You'll be assigned a country market and face real-world business scenarios. Every decision is scored against Hofstede's 6 Cultural Dimensions.
+    </p>
+    <div>
+      <div class="dim-row"><div class="dim-dot" style="background:var(--dim1)"></div><div><div class="dim-name">Power Distance (PDI)</div><div class="dim-desc">The degree to which less powerful members accept unequal distribution of power. High PDI = hierarchical; Low PDI = flat structures.</div></div></div>
+      <div class="dim-row"><div class="dim-dot" style="background:var(--dim2)"></div><div><div class="dim-name">Individualism vs Collectivism (IDV)</div><div class="dim-desc">High IDV = individual goals dominate. Low IDV = group harmony and collective decisions prevail.</div></div></div>
+      <div class="dim-row"><div class="dim-dot" style="background:var(--dim3)"></div><div><div class="dim-name">Masculinity vs Femininity (MAS)</div><div class="dim-desc">High MAS = competition, assertiveness, achievement. Low MAS = cooperation, quality of life, care.</div></div></div>
+      <div class="dim-row"><div class="dim-dot" style="background:var(--dim4)"></div><div><div class="dim-name">Uncertainty Avoidance (UAI)</div><div class="dim-desc">High UAI = strict rules, risk aversion. Low UAI = comfort with ambiguity and change.</div></div></div>
+      <div class="dim-row"><div class="dim-dot" style="background:var(--dim5)"></div><div><div class="dim-name">Long-Term Orientation (LTO)</div><div class="dim-desc">High LTO = thrift, perseverance, long-term planning. Low LTO = short-term results, tradition, quick wins.</div></div></div>
+      <div class="dim-row"><div class="dim-dot" style="background:var(--dim6)"></div><div><div class="dim-name">Indulgence vs Restraint (IVR)</div><div class="dim-desc">High IVR = enjoying life, leisure, fun. Low IVR = restrained, duty-focused, suppression of gratification.</div></div></div>
+    </div>
+    <div style="margin-top:22px;display:flex;justify-content:flex-end">
+      <button class="btn btn-primary" onclick="closeModal('how-modal')">Got It ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- Leaderboard -->
+<div class="modal-overlay" id="lb-modal">
+  <div class="modal-box">
+    <div class="modal-title">🏆 Leaderboard</div>
+    <div class="leaderboard-list" id="lb-list"><div class="lb-empty">No entries yet. Complete the simulation!</div></div>
+    <div style="margin-top:22px;display:flex;justify-content:flex-end">
+      <button class="btn btn-secondary" onclick="closeModal('lb-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Score Name Prompt -->
+<div class="modal-overlay" id="name-modal">
+  <div class="modal-box" style="max-width:420px;text-align:center">
+    <div class="modal-title">🎉 Simulation Complete!</div>
+    <p style="font-size:0.9rem;color:rgba(240,244,255,0.65);margin-bottom:20px">Enter your name to save your score to the leaderboard.</p>
+    <input id="player-name-input" type="text" placeholder="Your name..." style="width:100%;padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:var(--white);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;margin-bottom:16px">
+    <button class="btn btn-primary" style="width:100%" id="save-score-btn">Save Score</button>
+  </div>
+</div>
+
+<script>
+// =============================================
+//   ANIMATED BACKGROUND
+// =============================================
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, orbs = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function initOrbs() {
+    orbs = [];
+    for (let i = 0; i < 7; i++) {
+      orbs.push({
+        x: Math.random() * W, y: Math.random() * H,
+        r: 180 + Math.random() * 220,
+        dx: (Math.random() - 0.5) * 0.4,
+        dy: (Math.random() - 0.5) * 0.4,
+        color: i % 2 === 0 ? '201,162,39' : '124,110,245',
+        opacity: 0.06 + Math.random() * 0.08
+      });
+    }
+  }
+
+  function drawBg() {
+    ctx.fillStyle = '#0a0f2e';
+    ctx.fillRect(0, 0, W, H);
+    orbs.forEach(o => {
+      const g = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
+      g.addColorStop(0, `rgba(${o.color},${o.opacity})`);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+      o.x += o.dx; o.y += o.dy;
+      if (o.x < -o.r) o.x = W + o.r;
+      if (o.x > W + o.r) o.x = -o.r;
+      if (o.y < -o.r) o.y = H + o.r;
+      if (o.y > H + o.r) o.y = -o.r;
+    });
+    requestAnimationFrame(drawBg);
+  }
+
+  resize();
+  initOrbs();
+  drawBg();
+  window.addEventListener('resize', () => { resize(); });
+})();
+
+// =============================================
+//   COUNTRY DATA OBJECT
+// =============================================
+const COUNTRIES = {
+  japan: {
+    name: 'Japan', flag: '🇯🇵',
+    overview: 'Japan is a high-context, collectivist society with strong hierarchical norms. Business relationships are built on trust, patience, and long-term mutual respect. Consensus (nemawashi) and face-saving are critical. Silence is often a deliberate communication tool.',
+    hofstede: { pdi: 54, idv: 46, mas: 95, uai: 92, lto: 88, ivr: 42 }
+  },
+  usa: {
+    name: 'United States', flag: '🇺🇸',
+    overview: 'The USA champions individualism, direct communication, and short-term results. Business culture is informal but highly performance-driven. Americans expect transparency, rapid decisions, and explicit agreements. Competition and self-promotion are respected.',
+    hofstede: { pdi: 40, idv: 91, mas: 62, uai: 46, lto: 26, ivr: 68 }
+  },
+  germany: {
+    name: 'Germany', flag: '🇩🇪',
+    overview: 'Germany values precision, structure, and thorough planning. Business interactions are formal, direct, and fact-based. Germans are risk-averse and dislike ambiguity. Punctuality is a sign of respect. Contracts are detailed and strictly followed.',
+    hofstede: { pdi: 35, idv: 67, mas: 66, uai: 65, lto: 83, ivr: 40 }
+  },
+  india: {
+    name: 'India', flag: '🇮🇳',
+    overview: 'India blends high power distance with relationship-based, collectivist values. Business often runs through personal networks and family connections. Hierarchy is respected, but flexibility in processes is common. Non-verbal cues and indirectness are key.',
+    hofstede: { pdi: 77, idv: 48, mas: 56, uai: 40, lto: 51, ivr: 26 }
+  },
+  brazil: {
+    name: 'Brazil', flag: '🇧🇷',
+    overview: 'Brazil is a warm, relationship-oriented culture where personal connections precede business transactions. Brazilians are emotionally expressive and flexible with time. Group harmony and building rapport (jeitinho) are central to success.',
+    hofstede: { pdi: 69, idv: 38, mas: 49, uai: 76, lto: 44, ivr: 59 }
+  },
+  sweden: {
+    name: 'Sweden', flag: '🇸🇪',
+    overview: 'Sweden exemplifies low power distance, feminine values, and high individualism. Management is flat and democratic. Work-life balance is paramount. Consensus is sought but not through hierarchy — all voices carry equal weight. Direct, honest communication is expected.',
+    hofstede: { pdi: 31, idv: 71, mas: 5, uai: 29, lto: 53, ivr: 78 }
+  }
+};
+
+const DIM_KEYS = ['pdi','idv','mas','uai','lto','ivr'];
+const DIM_NAMES = ['Power Distance','Individualism','Masculinity','Uncertainty Avoid.','Long-Term Orient.','Indulgence'];
+const DIM_COLORS = ['#7c6ef5','#f56e4f','#4fc3f7','#2de08d','#f5cc5e','#f56eb0'];
+
+// =============================================
+//   QUESTION DATABASE
+// =============================================
+const Q_ROUND1 = [
+  {
+    // Correct: A (pos 0)
+    id:'r1q1', dim:'pdi', text:'You\'re holding your first team meeting as Global Expansion Director. How do you open the session to establish your leadership presence effectively?',
+    options:[
+      {text:'Enter last, take the designated head seat, introduce yourself formally with your title and credentials, then outline the meeting agenda.', value:'best'},
+      {text:'Address each team member by first name, sit in a circle, and invite everyone to share ideas equally from the start.', value:'wrong'},
+      {text:'Send a casual email the night before asking people to introduce themselves and skip the formal structure.', value:'wrong'},
+      {text:'Ask the most senior local employee to run the meeting while you observe silently.', value:'partial'}
+    ],
+    best: 0, partial: 3,
+    explanation: 'In high-PDI cultures, visible hierarchy and formal entry signals authority and earns respect. Establishing your seniority through formal protocol is critical before relationship-building begins.',
+    takeaway: 'In high power distance cultures (Japan, India, Brazil), leadership symbols — titles, seating, formal introductions — communicate respect and authority before a single word is spoken.'
+  },
+  {
+    // Correct: C (pos 2)
+    id:'r1q2', dim:'idv', text:'You need to implement a new performance evaluation system. Which approach is culturally optimal?',
+    options:[
+      {text:'Individual KPI rankings posted on a shared team dashboard for maximum transparency.', value:'wrong'},
+      {text:'Quarterly individual reviews with personal salary increments based on personal ranking.', value:'partial'},
+      {text:'360-degree peer feedback with group performance bonuses tied to collective outcomes.', value:'best'},
+      {text:'No formal system — let the team self-regulate based on social pressure.', value:'wrong'}
+    ],
+    best: 2, partial: 1,
+    explanation: 'Collectivist cultures resist individual public rankings as they threaten group harmony and cause loss of face. Group-based incentives align with collective cultural values.',
+    takeaway: 'In collectivist markets, performance systems must reward teams, not individuals. Public ranking destroys morale and violates the group-first cultural code.'
+  },
+  {
+    // Correct: D (pos 3)
+    id:'r1q3', dim:'mas', text:'A team member is consistently working late hours without being asked. How do you respond?',
+    options:[
+      {text:'Publicly praise their dedication in the next all-hands meeting as a model employee.', value:'partial'},
+      {text:'Immediately assign them additional projects since they clearly have extra capacity.', value:'wrong'},
+      {text:'Ignore it — overwork is their personal choice and not a management concern.', value:'wrong'},
+      {text:'Encourage them to maintain work-life balance and check whether workload distribution is equitable.', value:'best'}
+    ],
+    best: 3, partial: 0,
+    explanation: 'In feminine cultures (Sweden), overwork signals poor planning or inefficient systems, not dedication. Leadership must protect work-life balance as a core value.',
+    takeaway: 'Feminine cultures view excessive work as a system failure, not a virtue. Great leaders redistribute workload and model sustainable performance habits.'
+  },
+  {
+    // Correct: A (pos 0)
+    id:'r1q4', dim:'uai', text:'You propose a new workflow that hasn\'t been tested locally before. What is the best implementation approach?',
+    options:[
+      {text:'Present a detailed process document, run a controlled pilot with a small team, gather structured feedback, then roll out.', value:'best'},
+      {text:'Launch it immediately companywide and adjust based on live feedback.', value:'wrong'},
+      {text:'Ask employees to figure it out themselves after a brief verbal explanation.', value:'wrong'},
+      {text:'Implement it but make clear it\'s optional until people feel comfortable.', value:'partial'}
+    ],
+    best: 0, partial: 3,
+    explanation: 'High uncertainty-avoidant cultures require evidence-based, structured introductions of change. Sudden, unplanned implementation triggers anxiety and resistance.',
+    takeaway: 'In high-UAI cultures, never surprise teams with sudden changes. Documentation, structured pilots, and reassurance of continuity are the keys to successful innovation adoption.'
+  },
+  {
+    // Correct: C (pos 2)
+    id:'r1q5', dim:'pdi', text:'A junior team member directly challenges your decision in front of the entire team. How do you respond?',
+    options:[
+      {text:'Welcome the challenge openly, invite a group debate, and change your position if their argument is strong.', value:'wrong'},
+      {text:'Firmly shut down the challenge, emphasize your authority, and continue without discussion.', value:'wrong'},
+      {text:'Acknowledge the comment neutrally, suggest discussing it privately after the meeting, then continue.', value:'best'},
+      {text:'Ignore it completely and move on without acknowledging the comment.', value:'partial'}
+    ],
+    best: 2, partial: 3,
+    explanation: 'Public challenges in high-PDI cultures violate hierarchy protocols. Privately addressing the concern preserves your authority while respecting the individual\'s input — avoiding both loss of face and escalation.',
+    takeaway: 'High PDI cultures require that disagreements flow through private channels, not public forums. Managing face-saving for all parties is a critical leadership skill.'
+  },
+  {
+    // Correct: D (pos 3)
+    id:'r1q6', dim:'lto', text:'HQ wants a 90-day ROI plan for your market entry. Your local team suggests a 3-year relationship-building phase first. How do you navigate this?',
+    options:[
+      {text:'Reject the local team\'s timeline completely — quarterly reporting to HQ is non-negotiable.', value:'wrong'},
+      {text:'Accept HQ\'s 90-day timeline and push the local team to deliver regardless.', value:'wrong'},
+      {text:'Tell HQ that local culture requires full flexibility and no timeline commitments.', value:'partial'},
+      {text:'Present HQ with a dual-track plan: short-term process milestones and long-term market KPIs with cultural context.', value:'best'}
+    ],
+    best: 3, partial: 2,
+    explanation: 'Long-term oriented cultures build trust before transactions. The globally competent leader negotiates between HQ\'s short-term demands and the cultural reality of long-horizon markets.',
+    takeaway: 'Navigating LTO conflict requires bridging short-term shareholder expectations with long-term cultural timelines through transparent, dual-track communication with both HQ and local teams.'
+  },
+  {
+    // Correct: B (pos 1) — intentional variety
+    id:'r1q7', dim:'ivr', text:'After a successful project completion, the team wants to celebrate with a late-night social event including drinks. As the director, you:',
+    options:[
+      {text:'Decline — social events are unprofessional and blur boundaries.', value:'wrong'},
+      {text:'Participate enthusiastically and let the team enjoy the win — celebration is part of the culture.', value:'best'},
+      {text:'Send a congratulations email and skip the event to maintain professional distance.', value:'wrong'},
+      {text:'Attend briefly, give a short speech, then leave early.', value:'partial'}
+    ],
+    best: 1, partial: 3,
+    explanation: 'In high-indulgence cultures (Brazil, USA, Sweden), social celebrations are part of professional relationship-building. Refusing to participate signals disconnection and damages rapport.',
+    takeaway: 'In indulgent cultures, shared celebrations are strategic, not optional. Leaders who participate in team social rituals build trust and loyalty faster than any formal process.'
+  },
+  {
+    // Correct: A (pos 0)
+    id:'r1q8', dim:'idv', text:'A culturally tight-knit team is underperforming collectively due to one individual\'s output. How do you address this?',
+    options:[
+      {text:'Meet privately with the individual, frame the issue in terms of team impact, and co-create a development plan.', value:'best'},
+      {text:'Call out the individual publicly in the next team meeting to create accountability.', value:'wrong'},
+      {text:'Address only the team as a whole and avoid singling out anyone.', value:'partial'},
+      {text:'Issue a formal written warning to the individual immediately.', value:'wrong'}
+    ],
+    best: 0, partial: 2,
+    explanation: 'Collectivist cultures require face-saving approaches. Private conversations framed around group impact respect both individual dignity and collective harmony — the only acceptable path to performance correction.',
+    takeaway: 'Never publicly shame underperformers in collectivist cultures. Private coaching framed around group impact — "the team needs you" — yields far better results than formal reprimands.'
+  }
+];
+
+const Q_ROUND2 = [
+  {
+    // Correct: D (pos 3)
+    id:'r2q1', dim:'uai', text:'During a joint venture negotiation, the other party goes completely silent for over 90 seconds after your proposal. What do you do?',
+    options:[
+      {text:'Fill the silence immediately by adding more concessions to sweeten the deal.', value:'wrong'},
+      {text:'Repeat your proposal in a different way to check if they understood.', value:'wrong'},
+      {text:'Ask directly: "Do you have concerns about our offer?"', value:'partial'},
+      {text:'Maintain respectful silence — it signals consideration and deliberation, not rejection.', value:'best'}
+    ],
+    best: 3, partial: 2,
+    explanation: 'In Japanese and many Asian business contexts, silence is a deliberate communication tool signaling deep consideration. Filling it prematurely is interpreted as anxiety, weakness, or poor listening.',
+    takeaway: 'Silence in negotiation is not a void to fill — it\'s a signal to respect. Culturally competent negotiators treat silence as active communication, not awkward pausing.'
+  },
+  {
+    // Correct: A (pos 0)
+    id:'r2q2', dim:'idv', text:'Your counterpart says "We need to consult internally with our team before deciding." How do you interpret and respond?',
+    options:[
+      {text:'Recognize it as a standard collectivist process, express understanding, and set a mutually agreed follow-up date.', value:'best'},
+      {text:'View it as a stalling tactic and push for a commitment today.', value:'wrong'},
+      {text:'Tell them the deal expires if not confirmed within 24 hours.', value:'wrong'},
+      {text:'Offer to meet their full team next week to speed up consensus.', value:'partial'}
+    ],
+    best: 0, partial: 3,
+    explanation: 'Collectivist negotiators never decide alone — internal consensus is culturally mandatory. Pressuring for immediate commitment destroys trust and disrespects the decision-making process.',
+    takeaway: 'In collectivist negotiations, decision timelines are longer by design. The global leader who respects the consultation process is always preferred over the impatient dealmaker.'
+  },
+  {
+    // Correct: C (pos 2)
+    id:'r2q3', dim:'pdi', text:'You disagree with the lead negotiator\'s pricing structure. How do you communicate your position?',
+    options:[
+      {text:'State your disagreement directly and forcefully: "That price won\'t work for us."', value:'wrong'},
+      {text:'Say nothing during the meeting but send a counter-proposal email the next day.', value:'partial'},
+      {text:'Use indirect framing: "We deeply appreciate your perspective. Perhaps we could explore an alternative that works for both sides?"', value:'best'},
+      {text:'Tell their most junior team member your concerns and ask them to relay it up.', value:'wrong'}
+    ],
+    best: 2, partial: 1,
+    explanation: 'Direct public disagreement with authority figures in high-PDI cultures is a face-threatening act. Indirect, respectful framing preserves relationships and keeps negotiation channels open.',
+    takeaway: 'Global negotiators must master indirect disagreement. Proposing alternatives rather than rejecting proposals transforms confrontation into collaboration in high-PDI environments.'
+  },
+  {
+    // Correct: D (pos 3)
+    id:'r2q4', dim:'uai', text:'The contract your partner presents is vague on execution timelines. How do you proceed?',
+    options:[
+      {text:'Accept the vague timeline — specifics can be worked out as you go.', value:'wrong'},
+      {text:'Sign the contract and raise timeline concerns during the first implementation meeting.', value:'wrong'},
+      {text:'Request a summary of key timelines verbally but not in the contract.', value:'partial'},
+      {text:'Insist on adding clear milestones, deliverables, and consequence clauses before signing.', value:'best'}
+    ],
+    best: 3, partial: 2,
+    explanation: 'High-UAI cultures require contractual certainty and detailed specifications. Ambiguity in legal documents creates anxiety and future disputes — always clarify before signing.',
+    takeaway: 'For high-UAI partners like Germans and Japanese, ambiguity in contracts is not flexibility — it\'s a red flag. Explicit, detailed agreements are a sign of professionalism and respect.'
+  },
+  {
+    // Correct: A (pos 0)
+    id:'r2q5', dim:'mas', text:'Your negotiation partner proposes a long break for a social lunch before any agreement is reached. HQ is pressuring you for a same-day deal. You:',
+    options:[
+      {text:'Accept the lunch as an integral part of the relationship-building process and trust it will accelerate trust.', value:'best'},
+      {text:'Decline the lunch and insist on finalizing terms before any social activity.', value:'wrong'},
+      {text:'Accept the lunch but keep checking your phone and referencing the deadline.', value:'wrong'},
+      {text:'Attend for 30 minutes, then excuse yourself to "handle urgent HQ matters."', value:'partial'}
+    ],
+    best: 0, partial: 3,
+    explanation: 'In relationship-first cultures, shared meals are where trust is built and deals are psychologically agreed upon before the formal signing. Skipping relationship investment is a dealbreaker.',
+    takeaway: 'In feminine and collectivist cultures, the deal is made at the lunch table, not in the boardroom. Relationship investment is ROI — not a detour from the negotiation.'
+  },
+  {
+    // Correct: C (pos 2)
+    id:'r2q6', dim:'lto', text:'A potential partner expresses interest in a 10-year strategic partnership rather than a single-project contract. How do you respond?',
+    options:[
+      {text:'Politely redirect to a shorter engagement — long-term commitments are too risky.', value:'wrong'},
+      {text:'Agree to everything verbally now and figure out the details after signing.', value:'wrong'},
+      {text:'Express genuine enthusiasm for the long-term vision while proposing phased milestones that allow both parties to build confidence incrementally.', value:'best'},
+      {text:'Ask for the 10-year projection in writing before committing to the conversation.', value:'partial'}
+    ],
+    best: 2, partial: 3,
+    explanation: 'Long-term orientation cultures (Japan, China, Germany) view sustained partnerships as the only real business relationships. Enthusiasm for long-term vision, combined with pragmatic milestones, signals cultural alignment.',
+    takeaway: 'When a high-LTO partner proposes a long horizon, embrace it. Proposing phased milestones within a long-term framework shows both strategic vision and operational pragmatism.'
+  },
+  {
+    // Correct: D (pos 3)
+    id:'r2q7', dim:'idv', text:'You are structuring the compensation package for a joint-venture team. Your counterpart insists on equal team bonuses rather than individual commissions. You:',
+    options:[
+      {text:'Reject their model — individual commissions drive better performance in all cultures.', value:'wrong'},
+      {text:'Propose a hybrid: 60% team bonus, 40% individual performance.', value:'partial'},
+      {text:'Table the issue and focus on base salaries only for now.', value:'wrong'},
+      {text:'Agree to their model and propose team performance bonuses tied to collective milestones.', value:'best'}
+    ],
+    best: 3, partial: 1,
+    explanation: 'In collectivist cultures, compensation must reinforce group cohesion. Individual competitive bonuses undermine team trust and cultural values. Full team-based models create shared ownership.',
+    takeaway: 'Compensation design in collectivist markets must reward collective achievement. Hybrid models are acceptable, but fully team-based incentives align best with cultural values and drive cohesion.'
+  },
+  {
+    // Correct: B (pos 1)
+    id:'r2q8', dim:'uai', text:'Your counterpart requests extensive background documentation, legal reviews, and reference checks before advancing negotiations. This is taking weeks. You:',
+    options:[
+      {text:'Express frustration and set a hard deadline for the process to conclude.', value:'wrong'},
+      {text:'Provide all requested documentation promptly and view thorough due diligence as a sign of serious partnership interest.', value:'best'},
+      {text:'Ask if you can skip some steps since you have a track record of success.', value:'wrong'},
+      {text:'Suggest a call to explain why these checks aren\'t necessary given your company\'s reputation.', value:'partial'}
+    ],
+    best: 1, partial: 3,
+    explanation: 'High-UAI cultures conduct extensive due diligence as a mandatory trust-building exercise. Impatience signals unreliability. Thorough compliance signals professionalism and earns long-term trust.',
+    takeaway: 'For high-UAI partners, slow due diligence IS the fast track to trust. Every document you provide on time, every audit you pass, accelerates relationship capital exponentially.'
+  }
+];
+
+const Q_ROUND3_POOL = [
+  {
+    // Correct: C (pos 2)
+    id:'r3q1', dim:'pdi', text:'CRISIS: During a strategy presentation, a junior employee directly interrupts you to challenge a data point — in front of senior local executives.',
+    options:[
+      {text:'Invite the junior employee to lead the rest of the presentation since they seem more prepared.', value:'wrong'},
+      {text:'Shut down the interruption immediately: "Please hold all questions until I\'m finished."', value:'partial'},
+      {text:'Calmly acknowledge the interruption, maintain composure, and say "Thank you — let\'s revisit that point shortly" then continue professionally.', value:'best'},
+      {text:'Ignore the comment entirely and maintain your flow.', value:'wrong'}
+    ],
+    best: 2, partial: 1,
+    explanation: 'In high-PDI cultures, a junior challenging a senior publicly is a significant protocol violation. Your grace under pressure protects your authority while also signaling emotional maturity to senior observers.',
+    takeaway: 'Crisis composure in high-PDI situations is measured by how gracefully you reabsorb disruptions. Reacting with anger or excessive indulgence both signal weakness.'
+  },
+  {
+    // Correct: A (pos 0)
+    id:'r3q2', dim:'pdi', text:'CRISIS: Your most important local partner consistently avoids direct eye contact during meetings, which feels dismissive and suspicious to you.',
+    options:[
+      {text:'Recognize that sustained eye contact can signal challenge or disrespect in many Asian cultures — adapt your own interpretation.', value:'best'},
+      {text:'Confront them about it: "I notice you never look at me when I speak — is there a problem?"', value:'wrong'},
+      {text:'Interpret it as dishonesty and raise the concern with a cultural consultant before your next meeting.', value:'partial'},
+      {text:'Mirror their behavior and also avoid eye contact in future meetings.', value:'wrong'}
+    ],
+    best: 0, partial: 2,
+    explanation: 'Non-verbal communication is culture-specific. In Japan and many Southeast Asian cultures, avoiding sustained eye contact with superiors is a sign of respect, not dishonesty or disengagement.',
+    takeaway: 'Non-verbal cues have no universal meaning. The globally intelligent leader checks their cultural assumptions before interpreting body language, especially in high-context cultures.'
+  },
+  {
+    // Correct: D (pos 3)
+    id:'r3q3', dim:'uai', text:'CRISIS: HQ demands a decision within 24 hours on a partnership that your local team says requires at least 2 more weeks of internal deliberation.',
+    options:[
+      {text:'Force the local team to decide immediately regardless of their process — HQ comes first.', value:'wrong'},
+      {text:'Make the decision yourself without waiting for local team consensus.', value:'wrong'},
+      {text:'Ask HQ to contact the local team directly and resolve the conflict themselves.', value:'partial'},
+      {text:'Communicate to HQ the cultural necessity of the deliberation process while negotiating a 1-week extension and providing interim progress updates.', value:'best'}
+    ],
+    best: 3, partial: 2,
+    explanation: 'You are the cultural bridge between HQ and the local team. Your job is to negotiate time and manage expectations in both directions while protecting the integrity of both cultural norms.',
+    takeaway: 'Cultural agility means being the trusted interpreter between HQ urgency and local deliberation rhythms. The best leaders buy time with transparency, not silence.'
+  },
+  {
+    // Correct: B (pos 1)
+    id:'r3q4', dim:'idv', text:'CRISIS: During a sensitive meeting, a team member becomes visibly emotional and starts crying — a reaction unfamiliar to other Western attendees.',
+    options:[
+      {text:'Ignore it professionally and continue the agenda — emotions are not part of a business meeting.', value:'wrong'},
+      {text:'Pause the meeting immediately: "Let\'s take 10 minutes." Check privately whether they\'re okay and assess whether to continue.', value:'best'},
+      {text:'Acknowledge it publicly: "We can all see this is a difficult topic for Maria — let\'s support her."', value:'wrong'},
+      {text:'Quickly move to a different agenda item without drawing attention to the situation.', value:'partial'}
+    ],
+    best: 1, partial: 3,
+    explanation: 'Emotional expression in meetings occurs across cultures. The humane and culturally intelligent response is to create space — a brief pause signals leadership empathy without public exposure.',
+    takeaway: 'Leaders who can hold emotional safety in cross-cultural teams build the highest-trust environments. Never ignore visible distress, and never expose it publicly — create a graceful bridge.'
+  },
+  {
+    // Correct: C (pos 2)
+    id:'r3q5', dim:'pdi', text:'CRISIS: Your local manager consistently delays decisions, always saying they need to "check with the team" even for minor operational matters.',
+    options:[
+      {text:'Bypass them and issue directives directly to their team members.', value:'wrong'},
+      {text:'Issue a memo clarifying that operational decisions below a certain threshold require no team consultation.', value:'wrong'},
+      {text:'Have a private conversation to understand their leadership style; recognize this may be a collectivist consensus pattern and build your strategy around it.', value:'best'},
+      {text:'Accept the delays as unavoidable and add buffer time to all project schedules.', value:'partial'}
+    ],
+    best: 2, partial: 3,
+    explanation: 'Consensus-seeking behavior is normal in collectivist, high-PDI cultures. Rather than disrupting their process, the culturally agile leader works with the rhythm while influencing timelines collaboratively.',
+    takeaway: 'What looks like indecisiveness in collectivist contexts is often responsible consensus management. Adapting your project rhythm to incorporate deliberation cycles is strategic, not passive.'
+  },
+  {
+    // Correct: D (pos 3)
+    id:'r3q6', dim:'mas', text:'CRISIS: Your partner organization refuses to schedule any meetings on Friday afternoons, citing that it\'s reserved for family time. Your tight launch timeline is at risk.',
+    options:[
+      {text:'Insist on Friday afternoon meetings — the launch timeline is the business priority.', value:'wrong'},
+      {text:'Schedule the meetings anyway and see who shows up.', value:'wrong'},
+      {text:'Ask the partner to make an exception "just this once" given the importance of the deadline.', value:'partial'},
+      {text:'Respect their work-life boundary, reschedule to mornings or earlier days, and revise the project timeline proactively with HQ.', value:'best'}
+    ],
+    best: 3, partial: 2,
+    explanation: 'In feminine, high-indulgence cultures (Nordics, many European markets), work-life balance is a non-negotiable value. Leaders who respect this earn long-term loyalty; those who violate it lose partnerships.',
+    takeaway: 'Respecting time boundaries in feminine cultures is not weakness — it\'s intelligence. Proactive timeline revision demonstrates leadership maturity, not lack of urgency.'
+  },
+  {
+    // Correct: A (pos 0)
+    id:'r3q7', dim:'ivr', text:'CRISIS: A significant project delay is caused by a local festival that the team treated as an informal holiday, despite it not being on the official company calendar.',
+    options:[
+      {text:'Add the festival to the official cultural calendar, absorb the delay, and build cultural observances into future project planning.', value:'best'},
+      {text:'Issue a warning to the team for unauthorized absence and escalate to HR.', value:'wrong'},
+      {text:'Accept the delay this time but make clear it cannot happen again.', value:'partial'},
+      {text:'Replace the team members who were absent with more reliable local hires.', value:'wrong'}
+    ],
+    best: 0, partial: 2,
+    explanation: 'Cultural observances are often invisible on standard calendars but deeply significant to local teams. The globally intelligent leader institutionalizes this knowledge rather than punishing cultural expression.',
+    takeaway: 'Cultural agility means building cultural intelligence into your systems, not just your reactions. A cultural calendar is a project management tool, not a courtesy gesture.'
+  },
+  {
+    // Correct: C (pos 2)
+    id:'r3q8', dim:'idv', text:'CRISIS: You make a casual joke referencing a stereotypical cultural habit during a team lunch. The room goes silent and faces look visibly uncomfortable.',
+    options:[
+      {text:'Double down with another joke to break the tension.', value:'wrong'},
+      {text:'Continue as if nothing happened — reading too much into silence is an overreaction.', value:'wrong'},
+      {text:'Immediately and sincerely apologize: "I realize that may have been insensitive — please accept my apology" and move on naturally.', value:'best'},
+      {text:'Ask the group directly if something was offensive.', value:'partial'}
+    ],
+    best: 2, partial: 3,
+    explanation: 'Cultural missteps happen even to experienced leaders. The right response is immediate, genuine acknowledgment without excessive self-flagellation. Swift, clean apologies rebuild trust faster than silence or justification.',
+    takeaway: 'Cultural mistakes are inevitable in global roles. What separates champions from underperformers is the speed, sincerity, and simplicity of their recovery. Apologize, learn, and advance.'
+  },
+  {
+    // Correct: D (pos 3)
+    id:'r3q9', dim:'uai', text:'CRISIS: A key supplier suddenly shifts a major delivery deadline by 3 weeks without explanation, threatening your product launch.',
+    options:[
+      {text:'Immediately terminate the supplier relationship and find an alternative.', value:'wrong'},
+      {text:'Send a formal legal notice warning of contract breach.', value:'wrong'},
+      {text:'Accept the delay publicly but quietly begin finding an alternative supplier in parallel.', value:'partial'},
+      {text:'Schedule an urgent meeting to understand the reason for the delay, assess solutions collaboratively, and renegotiate terms with your local cultural advisor present.', value:'best'}
+    ],
+    best: 3, partial: 2,
+    explanation: 'In relationship-oriented cultures, surprise changes often signal a crisis on the supplier\'s side rather than bad faith. A collaborative conversation with cultural context often reveals solutions unavailable in adversarial postures.',
+    takeaway: 'Crisis leadership in cross-cultural supply chains requires curiosity before consequences. Understanding why a partner shifted terms often reveals opportunities to strengthen, not sever, the relationship.'
+  },
+  {
+    // Correct: B (pos 1)
+    id:'r3q10', dim:'lto', text:'CRISIS: During a performance review cycle, local managers consistently rate all employees as "excellent" regardless of actual output metrics.',
+    options:[
+      {text:'Override the local ratings with your own objective assessments and communicate them directly to employees.', value:'wrong'},
+      {text:'Recognize the face-saving bias, introduce a calibration process with local managers focused on growth potential rather than comparative ranking.', value:'best'},
+      {text:'Conduct your own hidden performance assessment using output data and keep the formal ratings as-is.', value:'wrong'},
+      {text:'Accept the ratings for this cycle and plan to address the issue in a future HR policy review.', value:'partial'}
+    ],
+    best: 1, partial: 3,
+    explanation: 'In face-saving cultures, rating a colleague poorly is a relational act, not just an evaluation. Introducing a growth-focused calibration reframes the exercise in culturally acceptable terms while improving rigor.',
+    takeaway: 'Performance management in face-saving cultures requires redesigning the frame, not forcing external norms. Growth-orientation and future potential are culturally acceptable levers that objective ranking never will be.'
+  }
+];
+
+// =============================================
+//   GAME STATE
+// =============================================
+let GS = {
+  country: null, score: 100, streak: 0, bestStreak: 0,
+  mistakes: 0, correct: 0, incorrect: 0, bonusEarned: 0,
+  round: 1, qIndex: 0,
+  dimScores: { pdi:50, idv:50, mas:50, uai:50, lto:50, ivr:50 },
+  dimMistakes: { pdi:0, idv:0, mas:0, uai:0, lto:0, ivr:0 },
+  roundQuestions: [], answered: false, adaptive: 'normal',
+  currentQ: null
+};
+
+function resetGS() {
+  GS = {
+    country: null, score: 100, streak: 0, bestStreak: 0,
+    mistakes: 0, correct: 0, incorrect: 0, bonusEarned: 0,
+    round: 1, qIndex: 0,
+    dimScores: { pdi:50, idv:50, mas:50, uai:50, lto:50, ivr:50 },
+    dimMistakes: { pdi:0, idv:0, mas:0, uai:0, lto:0, ivr:0 },
+    roundQuestions: [], answered: false, adaptive: 'normal',
+    currentQ: null
+  };
+}
+
+// =============================================
+//   SCREEN MANAGEMENT
+// =============================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  el.classList.remove('screen-fade-enter');
+  void el.offsetWidth;
+  el.classList.add('screen-fade-enter');
+}
+
+// =============================================
+//   MODALS
+// =============================================
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// =============================================
+//   COUNTRY ASSIGNMENT
+// =============================================
+function assignCountry() {
+  const keys = Object.keys(COUNTRIES);
+  const key = keys[Math.floor(Math.random() * keys.length)];
+  GS.country = key;
+  const c = COUNTRIES[key];
+
+  document.getElementById('c-flag').textContent = c.flag;
+  document.getElementById('c-name').textContent = c.name;
+  document.getElementById('c-overview').textContent = c.overview;
+  document.getElementById('d-country').textContent = c.flag + ' ' + c.name;
+
+  // Build dim bars
+  const barsEl = document.getElementById('c-dim-bars');
+  barsEl.innerHTML = '';
+  DIM_KEYS.forEach((k, i) => {
+    const val = c.hofstede[k];
+    const row = document.createElement('div');
+    row.className = 'dim-bar-row';
+    row.innerHTML = `
+      <div class="dim-bar-label">
+        <span>${DIM_NAMES[i]}</span>
+        <span style="color:${DIM_COLORS[i]}">${val}</span>
+      </div>
+      <div class="dim-bar-track">
+        <div class="dim-bar-fill" id="bar-${k}" style="background:${DIM_COLORS[i]};width:0%"></div>
+      </div>`;
+    barsEl.appendChild(row);
+  });
+
+  setTimeout(() => {
+    DIM_KEYS.forEach(k => {
+      const el = document.getElementById(`bar-${k}`);
+      if (el) el.style.width = c.hofstede[k] + '%';
+    });
+  }, 100);
+}
+
+// =============================================
+//   ROUND SETUP
+// =============================================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function setupRound(round) {
+  GS.round = round;
+  GS.qIndex = 0;
+  GS.answered = false;
+
+  // Adaptive difficulty
+  if (round === 2 && GS.score > 140) GS.adaptive = 'hard';
+  else if (round === 2 && GS.score < 80) GS.adaptive = 'easy';
+
+  if (round === 1) {
+    GS.roundQuestions = shuffle(Q_ROUND1).slice(0, 6);
+  } else if (round === 2) {
+    GS.roundQuestions = shuffle(Q_ROUND2).slice(0, 6);
+  } else {
+    GS.roundQuestions = shuffle(Q_ROUND3_POOL).slice(0, 6);
+  }
+
+  // Update round header
+  const configs = [
+    { tag:'Round 1', tagClass:'tag-round1', title:'Leadership & Team Establishment', desc:'Adapt your management style to your assigned cultural environment.' },
+    { tag:'Round 2', tagClass:'tag-round2', title:'Negotiation & Strategic Communication', desc:'Navigate a high-stakes joint venture negotiation across cultural lines.' },
+    { tag:'Round 3', tagClass:'tag-round3', title:'Crisis & Cultural Agility', desc:'Real-time unexpected cultural conflicts demand adaptive reasoning.' }
+  ];
+  const cfg = configs[round-1];
+  document.getElementById('round-tag').textContent = cfg.tag;
+  document.getElementById('round-tag').className = `round-tag ${cfg.tagClass}`;
+  document.getElementById('round-title').textContent = cfg.title;
+  document.getElementById('round-desc').textContent = cfg.desc;
+
+  const labels = ['Round 1 – Leadership', 'Round 2 – Negotiation', 'Round 3 – Crisis'];
+  document.getElementById('d-round-label').textContent = labels[round-1];
+
+  renderQuestion();
+}
+
+// =============================================
+//   QUESTION RENDERING
+// =============================================
+function renderQuestion() {
+  const q = GS.roundQuestions[GS.qIndex];
+  GS.currentQ = q;
+  GS.answered = false;
+
+  const dimIdx = DIM_KEYS.indexOf(q.dim);
+  const dimColor = DIM_COLORS[dimIdx];
+
+  document.getElementById('q-num').textContent = `Question ${GS.qIndex + 1} of ${GS.roundQuestions.length}`;
+
+  const dimTagEl = document.getElementById('dim-tag');
+  dimTagEl.textContent = DIM_NAMES[dimIdx];
+  dimTagEl.style.background = dimColor + '22';
+  dimTagEl.style.color = dimColor;
+  dimTagEl.style.border = `1px solid ${dimColor}55`;
+
+  document.getElementById('q-text').textContent = q.text;
+
+  // Hint for easy mode
+  const hintEl = document.getElementById('hint-box');
+  if (GS.adaptive === 'easy') {
+    hintEl.textContent = `💡 Hint: Consider the ${DIM_NAMES[dimIdx]} dimension value for ${COUNTRIES[GS.country].name} (${COUNTRIES[GS.country].hofstede[q.dim]}/100).`;
+    hintEl.style.display = 'block';
+  } else {
+    hintEl.style.display = 'none';
+  }
+
+  // Render options
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  const letters = ['A','B','C','D'];
+
+  // Shuffle options in hard mode
+  let opts = q.options.map((o, i) => ({ ...o, origIdx: i }));
+  if (GS.adaptive === 'hard') opts = shuffle(opts);
+
+  opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt.text}</span>`;
+    btn.addEventListener('click', () => handleAnswer(opt.origIdx, btn, opts));
+    grid.appendChild(btn);
+  });
+
+  // Hide explanation
+  document.getElementById('explanation-panel').style.display = 'none';
+
+  // Update progress
+  const prog = ((GS.qIndex) / GS.roundQuestions.length) * 100;
+  document.getElementById('d-progress').style.width = prog + '%';
+
+  // Animate card
+  const card = document.getElementById('scenario-card');
+  card.style.opacity = 0;
+  card.style.transform = 'translateY(20px)';
+  setTimeout(() => {
+    card.style.transition = 'all 0.4s ease';
+    card.style.opacity = 1;
+    card.style.transform = 'translateY(0)';
+  }, 50);
+}
+
+// =============================================
+//   ANSWER HANDLING
+// =============================================
+function handleAnswer(optionIdx, clickedBtn, displayedOpts) {
+  if (GS.answered) return;
+  GS.answered = true;
+
+  const q = GS.currentQ;
+  const isCorrect = optionIdx === q.best;
+  const isPartial = optionIdx === q.partial;
+
+  // Disable all buttons
+  const allBtns = document.querySelectorAll('.option-btn');
+
+  // Determine scoring
+  let delta = 0;
+  let resultType = '';
+
+  if (isCorrect) {
+    delta = 15;
+    resultType = 'correct';
+    GS.streak++;
+    GS.correct++;
+    if (GS.streak > GS.bestStreak) GS.bestStreak = GS.streak;
+
+    // Combo bonus
+    let comboBonus = 0;
+    if (GS.streak === 3) { comboBonus = 20; }
+    else if (GS.streak === 5) { comboBonus = 40; }
+    else if (GS.streak > 5 && GS.streak % 3 === 0) { comboBonus = 20; }
+
+    if (comboBonus > 0) {
+      delta += comboBonus;
+      GS.bonusEarned += comboBonus;
+      showScorePopup(`+${comboBonus} COMBO!`, true);
+    }
+
+    // Easy mode reduced bonus
+    if (GS.adaptive === 'easy') delta = Math.round(delta * 0.85);
+
+    GS.dimScores[q.dim] = Math.min(100, GS.dimScores[q.dim] + 12);
+  } else if (isPartial) {
+    delta = 10;
+    resultType = 'partial';
+    GS.streak = 0;
+    GS.correct++;
+    GS.dimScores[q.dim] = Math.min(100, GS.dimScores[q.dim] + 5);
+  } else {
+    // Wrong
+    GS.dimMistakes[q.dim]++;
+    let penalty = -15;
+
+    // Severity — if a critical dimension mismatch
+    const countryDimVal = COUNTRIES[GS.country].hofstede[q.dim];
+    if (countryDimVal > 70 || countryDimVal < 30) penalty = -20;
+
+    // Repeat mistake multiplier
+    if (GS.dimMistakes[q.dim] >= 2) penalty = Math.round(penalty * 1.5);
+
+    // Easy mode reduced penalty
+    if (GS.adaptive === 'easy') penalty = Math.round(penalty * 0.7);
+
+    delta = penalty;
+    resultType = 'wrong';
+    GS.streak = 0;
+    GS.mistakes++;
+    GS.incorrect++;
+    GS.dimScores[q.dim] = Math.max(0, GS.dimScores[q.dim] - 15);
+  }
+
+  GS.score = Math.max(0, GS.score + delta);
+
+  // Show popup
+  showScorePopup(delta >= 0 ? `+${delta}` : `${delta}`, delta >= 0);
+
+  // Mark buttons
+  displayedOpts.forEach((opt, i) => {
+    const btn = document.querySelectorAll('.option-btn')[i];
+    btn.disabled = true;
+    if (opt.origIdx === q.best) btn.classList.add('correct');
+    else if (opt.origIdx === optionIdx && !isCorrect) btn.classList.add('incorrect');
+    else btn.classList.add('neutral');
+  });
+
+  // Update dashboard
+  updateDashboard();
+  drawRadar();
+
+  // Show explanation
+  showExplanation(resultType, delta, q);
+}
+
+function showExplanation(resultType, delta, q) {
+  const panel = document.getElementById('explanation-panel');
+  const iconEl = document.getElementById('expl-icon');
+  const titleEl = document.getElementById('expl-title');
+  const deltaEl = document.getElementById('expl-delta');
+
+  if (resultType === 'correct') {
+    iconEl.textContent = '✅';
+    titleEl.textContent = 'Culturally Aligned!';
+    titleEl.className = 'expl-title correct-title';
+    deltaEl.className = 'expl-score-delta delta-pos';
+    deltaEl.textContent = `+${delta} pts`;
+  } else if (resultType === 'partial') {
+    iconEl.textContent = '🟡';
+    titleEl.textContent = 'Partially Aligned';
+    titleEl.className = 'expl-title';
+    titleEl.style.color = '#ffb347';
+    deltaEl.className = 'expl-score-delta delta-pos';
+    deltaEl.textContent = `+${delta} pts`;
+  } else {
+    iconEl.textContent = '❌';
+    titleEl.textContent = 'Cultural Misalignment';
+    titleEl.className = 'expl-title incorrect-title';
+    deltaEl.className = 'expl-score-delta delta-neg';
+    deltaEl.textContent = `${delta} pts`;
+  }
+
+  document.getElementById('expl-body').textContent = q.explanation;
+  document.getElementById('expl-takeaway').textContent = q.takeaway;
+
+  panel.style.display = 'block';
+  panel.style.opacity = 0;
+  setTimeout(() => { panel.style.transition = 'opacity 0.3s'; panel.style.opacity = 1; }, 50);
+}
+
+// =============================================
+//   DASHBOARD UPDATE
+// =============================================
+function updateDashboard() {
+  document.getElementById('d-score').textContent = GS.score;
+  document.getElementById('d-mistakes').textContent = GS.mistakes;
+
+  const comboBadge = document.getElementById('combo-badge');
+  comboBadge.textContent = `🔥 Streak: ${GS.streak}`;
+  if (GS.streak >= 3) {
+    comboBadge.style.background = 'linear-gradient(135deg, #f5cc5e, #c9a227)';
+    comboBadge.style.color = '#0a0f2e';
+  } else {
+    comboBadge.style.background = 'linear-gradient(135deg, #7c6ef5, #5543d4)';
+    comboBadge.style.color = '#fff';
+  }
+  comboBadge.classList.remove('pop');
+  void comboBadge.offsetWidth;
+  if (GS.streak > 0) comboBadge.classList.add('pop');
+
+  document.getElementById('s-correct').textContent = GS.correct;
+  document.getElementById('s-incorrect').textContent = GS.incorrect;
+  document.getElementById('s-streak').textContent = GS.bestStreak;
+  document.getElementById('s-bonus').textContent = GS.bonusEarned;
+}
+
+// =============================================
+//   SCORE POPUP
+// =============================================
+function showScorePopup(text, positive) {
+  const el = document.createElement('div');
+  el.className = `score-popup ${positive ? 'pos' : 'neg'}`;
+  el.textContent = text;
+  el.style.left = (window.innerWidth / 2 - 40) + 'px';
+  el.style.top = '80px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+// =============================================
+//   RADAR CHART (Canvas)
+// =============================================
+function drawRadar(canvasId = 'radar-canvas') {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const r = Math.min(W, H) / 2 - 28;
+  const n = 6;
+  const labels = ['PDI','IDV','MAS','UAI','LTO','IVR'];
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid
+  for (let ring = 1; ring <= 5; ring++) {
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+      const x = cx + (r * ring / 5) * Math.cos(angle);
+      const y = cy + (r * ring / 5) * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Spokes
+  for (let i = 0; i < n; i++) {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Country reference polygon
+  const country = COUNTRIES[GS.country];
+  if (country) {
+    ctx.beginPath();
+    DIM_KEYS.forEach((k, i) => {
+      const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+      const val = country.hofstede[k] / 100;
+      const x = cx + r * val * Math.cos(angle);
+      const y = cy + r * val * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(201,162,39,0.1)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(201,162,39,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // Player polygon
+  ctx.beginPath();
+  DIM_KEYS.forEach((k, i) => {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const val = GS.dimScores[k] / 100;
+    const x = cx + r * val * Math.cos(angle);
+    const y = cy + r * val * Math.sin(angle);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+  grad.addColorStop(0, 'rgba(124,110,245,0.35)');
+  grad.addColorStop(1, 'rgba(79,195,247,0.15)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.strokeStyle = '#7c6ef5';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Dots and labels
+  DIM_KEYS.forEach((k, i) => {
+    const angle = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const val = GS.dimScores[k] / 100;
+    const x = cx + r * val * Math.cos(angle);
+    const y = cy + r * val * Math.sin(angle);
+
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = DIM_COLORS[i];
+    ctx.fill();
+
+    // Labels
+    const lx = cx + (r + 18) * Math.cos(angle);
+    const ly = cy + (r + 18) * Math.sin(angle);
+    ctx.fillStyle = 'rgba(240,244,255,0.55)';
+    ctx.font = `bold ${canvasId === 'end-radar-canvas' ? 11 : 10}px Space Mono, monospace`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(labels[i], lx, ly);
+  });
+}
+
+// =============================================
+//   NEXT QUESTION / ROUND TRANSITION
+// =============================================
+document.getElementById('next-btn').addEventListener('click', () => {
+  GS.qIndex++;
+
+  if (GS.qIndex >= GS.roundQuestions.length) {
+    // Round complete
+    if (GS.round < 3) {
+      setupRound(GS.round + 1);
+    } else {
+      showEndScreen();
+    }
+  } else {
+    renderQuestion();
+  }
+});
+
+// =============================================
+//   END SCREEN
+// =============================================
+function getPerformanceTitle(score) {
+  if (score >= 160) return { title: 'Global Culture Champion', emoji: '🏆' };
+  if (score >= 130) return { title: 'Strategic Global Leader', emoji: '🌟' };
+  if (score >= 100) return { title: 'Culturally Competent Manager', emoji: '🎯' };
+  if (score >= 80)  return { title: 'Developing Global Manager', emoji: '📈' };
+  return { title: 'Cultural Risk Zone', emoji: '⚠️' };
+}
+
+function generateAdvice() {
+  const weakDims = DIM_KEYS
+    .filter(k => GS.dimMistakes[k] > 0)
+    .sort((a,b) => GS.dimMistakes[b] - GS.dimMistakes[a]);
+
+  if (weakDims.length === 0) {
+    return 'Exceptional performance! You demonstrated consistent cultural alignment across all dimensions. Focus on expanding your expertise to high-complexity markets and consider mentoring peers in cultural intelligence frameworks.';
+  }
+
+  const dimMap = {
+    pdi: 'Study hierarchical communication protocols and authority dynamics in high-PDI markets like Japan and India.',
+    idv: 'Develop deeper understanding of collective decision-making processes and group-first incentive design.',
+    mas: 'Balance achievement-orientation with quality-of-life values; explore feminine leadership models from Nordic markets.',
+    uai: 'Practice structured change management approaches and invest in detailed documentation skills for high-UAI environments.',
+    lto: 'Develop long-horizon strategic thinking and relationship investment planning for LTO-dominant markets.',
+    ivr: 'Balance professional discipline with cultural celebration and relationship investment in indulgent markets.'
+  };
+
+  return weakDims.slice(0, 2).map(k => `• ${DIM_NAMES[DIM_KEYS.indexOf(k)]}: ${dimMap[k]}`).join('\n\n');
+}
+
+function showEndScreen() {
+  showScreen('end-screen');
+  const { title, emoji } = getPerformanceTitle(GS.score);
+
+  document.getElementById('trophy-emoji').textContent = emoji;
+  document.getElementById('perf-title').textContent = title;
+  document.getElementById('final-score').textContent = GS.score;
+
+  document.getElementById('es-correct').textContent = GS.correct;
+  document.getElementById('es-incorrect').textContent = GS.incorrect;
+  document.getElementById('es-streak').textContent = GS.bestStreak;
+  document.getElementById('es-bonus').textContent = GS.bonusEarned;
+  document.getElementById('es-country').textContent = COUNTRIES[GS.country].flag;
+  document.getElementById('es-rounds').textContent = '3';
+
+  // Weakness list
+  const wl = document.getElementById('weakness-list');
+  const weakDims = DIM_KEYS.filter(k => GS.dimMistakes[k] > 0);
+  if (weakDims.length === 0) {
+    wl.innerHTML = '<div class="weakness-item">✅ No significant weaknesses detected — excellent alignment across all dimensions!</div>';
+  } else {
+    wl.innerHTML = weakDims.map((k, i) => {
+      const idx = DIM_KEYS.indexOf(k);
+      return `<div class="weakness-item"><div style="width:10px;height:10px;border-radius:50%;background:${DIM_COLORS[idx]};flex-shrink:0"></div> <strong style="color:${DIM_COLORS[idx]}">${DIM_NAMES[idx]}:</strong> ${GS.dimMistakes[k]} error(s) detected</div>`;
+    }).join('');
+  }
+
+  document.getElementById('advice-text').textContent = generateAdvice();
+
+  // Draw end radar
+  setTimeout(() => drawRadar('end-radar-canvas'), 300);
+
+  // Prompt leaderboard save
+  setTimeout(() => openModal('name-modal'), 800);
+}
+
+// =============================================
+//   LEADERBOARD (localStorage)
+// =============================================
+function getLeaderboard() {
+  try { return JSON.parse(localStorage.getItem('gll_lb') || '[]'); }
+  catch(e) { return []; }
+}
+
+function saveToLeaderboard(name, score, country) {
+  const lb = getLeaderboard();
+  lb.push({ name, score, country, date: new Date().toLocaleDateString() });
+  lb.sort((a,b) => b.score - a.score);
+  const top10 = lb.slice(0, 10);
+  localStorage.setItem('gll_lb', JSON.stringify(top10));
+}
+
+function renderLeaderboard() {
+  const lb = getLeaderboard();
+  const el = document.getElementById('lb-list');
+  if (lb.length === 0) {
+    el.innerHTML = '<div class="lb-empty">No entries yet. Complete the simulation to appear here!</div>';
+    return;
+  }
+  el.innerHTML = lb.map((entry, i) => `
+    <div class="lb-row">
+      <span class="lb-rank">#${i+1}</span>
+      <span class="lb-name">${entry.name} <span style="opacity:0.4;font-size:0.8em">${entry.country || ''}</span></span>
+      <span class="lb-score">${entry.score} pts</span>
+      <span style="font-size:0.75em;color:rgba(240,244,255,0.35);margin-left:8px">${entry.date}</span>
+    </div>
+  `).join('');
+}
+
+document.getElementById('save-score-btn').addEventListener('click', () => {
+  const name = document.getElementById('player-name-input').value.trim() || 'Anonymous';
+  saveToLeaderboard(name, GS.score, COUNTRIES[GS.country]?.flag + ' ' + COUNTRIES[GS.country]?.name);
+  closeModal('name-modal');
+});
+
+// =============================================
+//   EXPORT REPORT
+// =============================================
+document.getElementById('export-btn').addEventListener('click', () => {
+  const { title } = getPerformanceTitle(GS.score);
+  const country = COUNTRIES[GS.country];
+  const html = `
+    <html><head><title>GLC Report</title><style>
+    body{font-family:Georgia,serif;max-width:700px;margin:40px auto;color:#1a1a2e;padding:20px}
+    h1{font-size:2rem;color:#0a0f2e;margin-bottom:4px}
+    h2{font-size:1.2rem;color:#c9a227;margin-top:28px}
+    .score{font-size:3rem;font-weight:700;color:#0a0f2e}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    td,th{border:1px solid #ddd;padding:8px 12px;font-size:0.9rem}
+    th{background:#0a0f2e;color:#fff}
+    .badge{display:inline-block;padding:6px 18px;background:#0a0f2e;color:#fff;border-radius:50px;font-size:0.85rem}
+    </style></head><body>
+    <h1>🌍 Global Leadership Challenge — Results Report</h1>
+    <p style="color:#666">Generated: ${new Date().toLocaleString()}</p>
+    <div class="score">${GS.score}</div>
+    <div>Cultural Intelligence Points</div>
+    <div style="margin-top:8px"><span class="badge">${title}</span></div>
+    <h2>Assignment</h2>
+    <p>${country.flag} <strong>${country.name}</strong> — Global Expansion Director</p>
+    <h2>Performance Summary</h2>
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Correct Answers</td><td>${GS.correct}</td></tr>
+      <tr><td>Incorrect Answers</td><td>${GS.incorrect}</td></tr>
+      <tr><td>Best Streak</td><td>${GS.bestStreak}</td></tr>
+      <tr><td>Bonus Points Earned</td><td>${GS.bonusEarned}</td></tr>
+      <tr><td>Mistakes</td><td>${GS.mistakes}</td></tr>
+    </table>
+    <h2>Dimension Scores</h2>
+    <table>
+      <tr><th>Dimension</th><th>Your Score</th><th>Country Benchmark</th></tr>
+      ${DIM_KEYS.map((k,i) => `<tr><td>${DIM_NAMES[i]}</td><td>${GS.dimScores[k]}</td><td>${country.hofstede[k]}</td></tr>`).join('')}
+    </table>
+    <h2>Development Advice</h2>
+    <p style="line-height:1.8">${generateAdvice().replace(/\n/g,'<br>')}</p>
+    </body></html>`;
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'GLC_Report.html';
+  a.click();
+});
+
+// =============================================
+//   RIPPLE EFFECT
+// =============================================
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.btn');
+  if (!btn) return;
+  const circle = document.createElement('span');
+  circle.className = 'ripple-effect';
+  const r = Math.max(btn.clientWidth, btn.clientHeight);
+  circle.style.width = circle.style.height = r + 'px';
+  const rect = btn.getBoundingClientRect();
+  circle.style.left = (e.clientX - rect.left - r/2) + 'px';
+  circle.style.top = (e.clientY - rect.top - r/2) + 'px';
+  btn.appendChild(circle);
+  setTimeout(() => circle.remove(), 600);
+});
+
+// =============================================
+//   BUTTON EVENTS
+// =============================================
+document.getElementById('start-btn').addEventListener('click', () => {
+  resetGS();
+  assignCountry();
+  showScreen('country-screen');
+});
+
+document.getElementById('how-btn').addEventListener('click', () => openModal('how-modal'));
+document.getElementById('lb-btn-home').addEventListener('click', () => { renderLeaderboard(); openModal('lb-modal'); });
+
+document.getElementById('begin-round1-btn').addEventListener('click', () => {
+  showScreen('game-screen');
+  updateDashboard();
+  setupRound(1);
+  setTimeout(() => drawRadar(), 200);
+});
+
+document.getElementById('restart-btn').addEventListener('click', () => {
+  resetGS();
+  assignCountry();
+  showScreen('country-screen');
+});
+
+document.getElementById('lb-btn-end').addEventListener('click', () => { renderLeaderboard(); openModal('lb-modal'); });
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// Initial radar draw when switching to game screen (delay for DOM)
+const radarObserver = new MutationObserver(() => {
+  if (document.getElementById('game-screen').classList.contains('active')) {
+    drawRadar();
+  }
+});
+radarObserver.observe(document.getElementById('game-screen'), { attributes: true, attributeFilter: ['class'] });
+
+</script>
+</body>
+</html>
